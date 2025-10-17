@@ -98,7 +98,7 @@ class HmyTCCSimulator:
         self.env = "local"
         # self.env = "dev"
         self.tx_num = 100000
-        self.path = "../harmony/.hmy/expr_accounts"
+        self.path = "../../harmony/.hmy/expr_accounts"
         self.interval = 0.01
         self.timeout = 30
         max_tx_workers = 100

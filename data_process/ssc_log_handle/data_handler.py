@@ -30,7 +30,7 @@ class DataProcessor:
         "error",
     ]
 
-    def __init__(self, tx_num=100000, shard_num=4, log_path="../ssc-harmony/tmp_log", output_dir="./output", simulate_data="../cli-py/tx_logs.csv"):
+    def __init__(self, tx_num=100000, shard_num=4, log_path="../../ssc-harmony/tmp_log", output_dir="./output", simulate_data="../cli-py/tx_logs.csv"):
         self.tx_num = tx_num
         self.log_path = log_path
         self.output_dir = output_dir
