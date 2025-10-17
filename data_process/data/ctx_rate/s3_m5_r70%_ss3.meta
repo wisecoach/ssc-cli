@@ -1,0 +1,14 @@
+process log file: /mnt/E/gowork/src/github.com/harmony-one/harmony/tmp_log/log-20250226-153739/zerolog-validator-127.0.0.1-9000.log
+test_time: 26.218704s, start_time: 2025-02-26 15:39:01.000687+08:00, end_time: 2025-02-26 15:39:27.219391+08:00
+throughput: 97.25881187720034
+tx_cnt: 2550
+inner_tx_cnt: 766
+inner_throughput: 29.21578427370018
+inner_latency: 3.375240212793735
+cross_tx_cnt: 1784
+cross_throughput: 68.04302760350016
+cross_latency: 5.434162265695048
+simulate_duration: 0.004041543529411767
+all_latency: 4.81567822941177
+
+Process finished with exit code 0

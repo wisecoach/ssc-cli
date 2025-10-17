@@ -1,0 +1,8 @@
+test_time: 25.977382s, start_time: 2025-02-26 16:11:40.507977+08:00, end_time: 2025-02-26 16:12:06.485359+08:00
+throughput: 98.16231674154078
+tx_cnt: 2550
+cross_tx_cnt: 2550
+cross_throughput: 98.16231674154078
+cross_latency: 4.923482619215694
+simulate_duration: 0.005777763137254908
+all_latency: 4.923482619215694

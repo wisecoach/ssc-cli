@@ -1,0 +1,1 @@
+{"first_block": 20000000, "last_block": 21000000, "data_dir": "data", "chunk_size": 1000, "current_block": 20009953, "current_tx_index": 53, "completed": false}

@@ -1,0 +1,13 @@
+test_time: 28.805374s, start_time: 2025-02-26 15:20:53.813610+08:00, end_time: 2025-02-26 15:21:22.618984+08:00
+throughput: 88.52514811993068
+tx_cnt: 2550
+inner_tx_cnt: 1530
+inner_throughput: 53.115088871958406
+inner_latency: 3.1050817947712437
+cross_tx_cnt: 1020
+cross_throughput: 35.41005924797227
+cross_latency: 5.271320442156851
+simulate_duration: 0.0023386407843137276
+all_latency: 3.9715772537255
+
+Process finished with exit code 0

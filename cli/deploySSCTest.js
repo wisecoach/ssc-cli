@@ -1,0 +1,203 @@
+const {default: Wallet} = require("ethereumjs-wallet");
+const {Web3} = require("web3");
+const global = require("./global");
+
+const privateKey = Buffer.from('7472616374206b65e45ffeb29e933944f5027ef139f124f430641487e70ea9a1', 'hex'); // 替换为你的私钥
+const wallet = new Wallet(privateKey);
+const address = wallet.getAddressString(); // 获取账户地址
+
+deployEnv = "local"; // 部署环境
+// deployEnv = "dev";
+
+addresses = [
+    "0x95a759428f9a8B4bc02E20086085F32B7A440463",       // 1
+    "0x660A4dE91307f84b7dE28057C25135D409015F2C",       // 2
+    "0xfC7D59Be0a1B36ef7D46059DCd896252c75E57c0",       // 3
+    "0xA320e5eCfeBb88d0e6969E80EbBEF342320a392E",       // 2
+    "0x3dd8F14e6d87a44d7a349197F5CB30a654e1320B",       // 3
+    "0x6636dE6Ee2c432D7e07b1ac6b153E5E8327018a9",       // 2
+    "0xA46F7A3465fc5CBe5aDe1F64F99862237953a4f1",       // 2
+    "0x91f3B25CC7EE548eF5Fad8995482468f90dB041D",       // 1
+    "0xa45a6e2395271bD2b92B00AEA6E305EBD22B95dF",       // 2
+    "0x64FE3A70eFeD2D50728D140993555b7aBf0eDa5F",       // 2
+    "0x2F0320c4E3203edbd8200E175acAB10043481858",       // 2
+    "0x59c91871216E902d3c1131DC75D16a28A5681b95",       // 1
+    "0xE55b817ac8B0f5D46C7c9558b6a7865258df7ED8",       // 2
+    "0x9B79b26d84Ba6b61aff84E3EA4a5F5A397f15BbC",       // 1
+    "0xDd66F429b278AD2076389520F4cF21e6c339d7d2",       // 0
+]
+
+shard_address = [
+    "0xDd66F429b278AD2076389520F4cF21e6c339d7d2",       // 0
+    "0x95a759428f9a8B4bc02E20086085F32B7A440463",       // 1
+    "0x660A4dE91307f84b7dE28057C25135D409015F2C",       // 2
+    "0xfC7D59Be0a1B36ef7D46059DCd896252c75E57c0",       // 3
+]
+
+shard_ip = [
+    '10.7.95.200',
+    '10.7.95.201',
+    '10.7.95.202',
+    '10.7.95.203',
+]
+
+numShard = 4
+const abi = [
+    {
+        "inputs": [],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "index",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256[]",
+                "name": "indexes",
+                "type": "uint256[]"
+            },
+            {
+                "internalType": "uint256[]",
+                "name": "parentIndexes",
+                "type": "uint256[]"
+            },
+            {
+                "internalType": "uint256[]",
+                "name": "shardIds",
+                "type": "uint256[]"
+            },
+            {
+                "internalType": "uint256[]",
+                "name": "statesCounts",
+                "type": "uint256[]"
+            },
+            {
+                "internalType": "bytes32[]",
+                "name": "statesHashes",
+                "type": "bytes32[]"
+            }
+        ],
+        "name": "simulate",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "",
+                "type": "bytes32"
+            }
+        ],
+        "name": "states",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    }
+]
+const bytecode = "608060405234801561001057600080fd5b50610990806100206000396000f3fe608060405234801561001057600080fd5b50600436106100365760003560e01c8063901d0f8b1461003b578063fbdc1ef114610361575b600080fd5b61034b600480360360c081101561005157600080fd5b81019080803590602001909291908035906020019064010000000081111561007857600080fd5b82018360208201111561008a57600080fd5b803590602001918460208302840111640100000000831117156100ac57600080fd5b919080806020026020016040519081016040528093929190818152602001838360200280828437600081840152601f19601f8201169050808301925050505050505091929192908035906020019064010000000081111561010c57600080fd5b82018360208201111561011e57600080fd5b8035906020019184602083028401116401000000008311171561014057600080fd5b919080806020026020016040519081016040528093929190818152602001838360200280828437600081840152601f19601f820116905080830192505050505050509192919290803590602001906401000000008111156101a057600080fd5b8201836020820111156101b257600080fd5b803590602001918460208302840111640100000000831117156101d457600080fd5b919080806020026020016040519081016040528093929190818152602001838360200280828437600081840152601f19601f8201169050808301925050505050505091929192908035906020019064010000000081111561023457600080fd5b82018360208201111561024657600080fd5b8035906020019184602083028401116401000000008311171561026857600080fd5b919080806020026020016040519081016040528093929190818152602001838360200280828437600081840152601f19601f820116905080830192505050505050509192919290803590602001906401000000008111156102c857600080fd5b8201836020820111156102da57600080fd5b803590602001918460208302840111640100000000831117156102fc57600080fd5b919080806020026020016040519081016040528093929190818152602001838360200280828437600081840152601f19601f8201169050808301925050505050505091929192905050506103a3565b6040518082815260200191505060405180910390f35b61038d6004803603602081101561037757600080fd5b8101908080359060200190929190505050610942565b6040518082815260200191505060405180910390f35b6000855187106103b557869050610938565b6000805b888110156103e6578481815181106103cd57fe5b60200260200101518201915080806001019150506103b9565b5060005b8489815181106103f657fe5b602002602001015181101561043f576001600080868486018151811061041857fe5b602002602001015181526020019081526020016000208190555080806001019150506103ea565b506000604051806080016040528073dd66f429b278ad2076389520f4cf21e6c339d7d273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020017395a759428f9a8b4bc02e20086085f32b7a44046373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200173660a4de91307f84b7de28057c25135d409015f2c73ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200173fc7d59be0a1b36ef7d46059dcd896252c75e57c073ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152509050600060018a0190505b88518110156108da57888a8151811061058357fe5b602002602001015188828151811061059757fe5b602002602001015114156108d057600060041161061c576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040180806020018281038252601d8152602001807f416464726573732061727261792063616e6e6f7420626520656d70747900000081525060200191505060405180910390fd5b600487828151811061062a57fe5b6020026020010151106106a5576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040180806020018281038252600f8152602001807f496e76616c69642073686172644964000000000000000000000000000000000081525060200191505060405180910390fd5b6000828883815181106106b457fe5b6020026020010151600481106106c657fe5b602002015190508073ffffffffffffffffffffffffffffffffffffffff1663901d0f8b838c8c8c8c8c6040518763ffffffff1660e01b815260040180878152602001806020018060200180602001806020018060200186810386528b818151815260200191508051906020019060200280838360005b8381101561075757808201518184015260208101905061073c565b5050505090500186810385528a818151815260200191508051906020019060200280838360005b8381101561079957808201518184015260208101905061077e565b50505050905001868103845289818151815260200191508051906020019060200280838360005b838110156107db5780820151818401526020810190506107c0565b50505050905001868103835288818151815260200191508051906020019060200280838360005b8381101561081d578082015181840152602081019050610802565b50505050905001868103825287818151815260200191508051906020019060200280838360005b8381101561085f578082015181840152602081019050610844565b505050509050019b505050505050505050505050602060405180830381600087803b15801561088d57600080fd5b505af11580156108a1573d6000803e3d6000fd5b505050506040513d60208110156108b757600080fd5b81019080805190602001909291905050509150506108d5565b6108da565b61056e565b60005b868b815181106108e957fe5b602002602001015181101561093057600080878387018151811061090957fe5b602002602001015181526020019081526020016000206000905580806001019150506108dd565b508093505050505b9695505050505050565b6000602052806000526040600020600091509050548156fea2646970667358221220154042a28e6ef51fefe1733eedc9c85cae821b5cde1b72127e8f4ea479e0fe6364736f6c63430007060033"
+const MAX_RETRIES = 100; // 最大重试次数
+const RETRY_DELAY = 5000; // 重试延迟5秒
+
+function get_endpoint(shardId) {
+    if (deployEnv === "local") {
+        return `http://localhost:${9500 + shardId * 40}`;
+    }
+    if (deployEnv === "dev") {
+        return `http://${shard_ip[shardId]}:${9500 + shardId * 40}`;
+    }
+    return "http://127.0.0.1:9500"
+}
+
+/**
+ * 带重试机制的合约部署
+ * @param {object} web3 - Web3实例
+ * @param {number} shardId - 分片ID
+ * @param {number} deployIndex - 部署序号
+ * @param {number} retryCount - 当前重试次数
+ */
+async function deployWithRetry(web3, shardId, deployIndex, retryCount = 0) {
+    try {
+        const SSCTestContract = new web3.eth.Contract(abi);
+        const contract = await SSCTestContract.deploy({
+            data: bytecode,
+        }).send({
+            from: web3.eth.defaultAccount,
+            gas: 30000000,
+            gasPrice: '20000010000'
+        });
+        console.log(`shard: ${shardId}, redeploy: ${deployIndex}, Contract Address: ${contract.options.address}`);
+        return contract;
+    } catch (error) {
+        if (retryCount >= MAX_RETRIES) {
+            console.error(`shard: ${shardId}, redeploy: ${deployIndex} failed after ${MAX_RETRIES} retries:`, error);
+            throw error;
+        }
+
+        console.warn(`shard: ${shardId}, redeploy: ${deployIndex} failed, error ${error} (attempt ${retryCount + 1}), retrying in 5s...`);
+        await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
+        return deployWithRetry(web3, shardId, deployIndex, retryCount + 1);
+    }
+}
+
+/**
+ * 串行部署单个分片内部的合约（15个合约按顺序部署）
+ * @param {number} shardId - 分片ID
+ */
+async function deployContractsForShard(shardId) {
+    const web3 = new Web3(get_endpoint(shardId));
+    web3.eth.accounts.wallet.add('0x7472616374206b65e45ffeb29e933944f5027ef139f124f430641487e70ea9a1');
+    web3.eth.defaultAccount = address; // 确保address已定义
+
+    // 单个分片内部串行执行
+    for (let j = 0; j < 15; j++) {
+        await deployWithRetry(web3, shardId, j);
+    }
+}
+
+/**
+ * 并行部署所有分片（4个分片同时部署）
+ */
+async function deployAllShards() {
+    const shardPromises = [];
+
+    // 不同分片之间并行执行
+    for (let i = 0; i < numShard; i++) {
+        shardPromises.push(
+            deployContractsForShard(i).catch(error => {
+                console.error(`Shard ${i} deployment failed completely:`, error);
+                return { shard: i, status: 'failed', error };
+            })
+        );
+    }
+
+    const results = await Promise.allSettled(shardPromises);
+
+    // 检查部署结果
+    const failedShards = results.filter(r => r.status === 'rejected');
+    if (failedShards.length > 0) {
+        console.error(`${failedShards.length} shards failed to deploy completely`);
+    } else {
+        console.log("All contracts deployed successfully.");
+    }
+}
+
+// 启动部署
+deployAllShards();
