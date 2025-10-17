@@ -102,4 +102,3 @@ cache_*_db
 # data
 *.csv
 *.pkl
-*.json

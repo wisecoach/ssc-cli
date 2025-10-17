@@ -1,0 +1,19 @@
+{
+  "name": "cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@truffle/hdwallet-provider": "^2.1.15",
+    "bn": "^1.0.5",
+    "dotenv": "^16.4.5",
+    "ethereumjs-wallet": "^1.0.2",
+    "solc": "^0.8.27",
+    "web3": "^4.13.0"
+  }
+}
