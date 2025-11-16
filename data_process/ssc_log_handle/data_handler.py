@@ -8,7 +8,6 @@ import numpy as np
 from dateutil import parser
 
 
-
 class DataProcessor:
 
     log_events = [
@@ -97,7 +96,7 @@ class DataProcessor:
             processed_txs.append(processed_tx)
             status_cnt[processed_tx['status']] += 1
         df = pd.DataFrame(processed_txs)
-        df.to_csv(os.path.join(self.output_dir, "processed_txs.csv"), index=False)
+        df.to_csv(os.path.join(self.output_dir, "processed_txs_15.csv"), index=False)
         print(status_cnt)
 
 

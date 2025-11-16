@@ -124,14 +124,14 @@ class StateDiffFetcher:
         self.storage_list = []
 
     def handle_state_diff(self, state_diff, tx_hash, timestamp):
-        if "result" not in state_diff:
-            print(f"Error state_diff no result: {state_diff}")
+        if "ssc_result" not in state_diff:
+            print(f"Error state_diff no ssc_result: {state_diff}")
             return
-        if "stateDiff" not in state_diff["result"]:
-            print(f"Error state_dff['result' no stateDiff]: {state_diff}")
+        if "stateDiff" not in state_diff["ssc_result"]:
+            print(f"Error state_dff['ssc_result' no stateDiff]: {state_diff}")
             return
-        for addr in state_diff["result"]["stateDiff"]:
-            diff = state_diff["result"]["stateDiff"][addr]
+        for addr in state_diff["ssc_result"]["stateDiff"]:
+            diff = state_diff["ssc_result"]["stateDiff"][addr]
             if "balance" in diff:
                 if isinstance(diff["balance"], dict):
                     if "*" in diff["balance"]:
@@ -164,7 +164,7 @@ class StateDiffFetcher:
                 if isinstance(diff["storage"], dict):
                     for state_addr, state in diff["storage"].items():
                         if not("*" in state and "from" in state["*"] and "to" in state["*"]):
-                            print(f"Error: {state_diff['result']['stateDiff'][addr]['storage']}")
+                            print(f"Error: {state_diff['ssc_result']['stateDiff'][addr]['storage']}")
                             continue
                         storage_data = {
                             "block_number": self.current_block,

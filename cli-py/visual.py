@@ -114,6 +114,7 @@ class ConsoleVisualizer:
         self.running = True
         self.display_completed = display_completed
         self.display_error = display_error
+        self.start_time = datetime.now()
 
     def clear_screen(self):
         """清屏"""
@@ -133,7 +134,8 @@ class ConsoleVisualizer:
               f"Waiting: {summary['waiting_threads']} | "
               f"Running: {summary['running_threads']} | "
               f"Completed: {summary['completed_threads']} | "
-              f"Errors: {summary['error_threads']}")
+              f"Errors: {summary['error_threads']} | "
+              f"TPS: {summary['completed_threads'] / (datetime.now() - self.start_time).total_seconds()} | ")
         print("=" * 100)
 
         # 显示线程详情

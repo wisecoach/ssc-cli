@@ -1,7 +1,7 @@
 const wallet = require("./init");
 const {Web3} = require("web3");
 require('dotenv').config();
-const tcc_abi = require("../abi/tcc_abi.json")
+const cc_abi = require("../abi/cc_abi.json")
 const bytecodes = require("../abi/bytecodes.json")
 const deployEnv = process.env.ENV; // 部署环境const
 const shardNum = process.env.SHARD_NUM || 4
@@ -81,7 +81,7 @@ async function deployContractsForShard(shardId) {
     for (let i = 0; i < wallet.length; i++) {
         web3.eth.accounts.wallet.add(wallet[i].privateKey)
     }
-    const bytecode = bytecodes["tcc"][shardNum]
+    const bytecode = bytecodes["cc"][shardNum]
     let shard2Contract = {}
     let time = 0
     let cnt = 0
@@ -90,7 +90,7 @@ async function deployContractsForShard(shardId) {
             time++
             const tasks = []
             for (let j = 0; j < wallet.length; j++) {
-                tasks.push(deployWithRetry(cnt++, web3, wallet[j].address, tcc_abi, bytecode, shardId, 0))
+                tasks.push(deployWithRetry(cnt++, web3, wallet[j].address, cc_abi, bytecode, shardId, 0))
             }
             let contracts = await Promise.allSettled(tasks)
             for (let i = 0; i < contracts.length; i++) {
@@ -120,7 +120,7 @@ async function deployAllShards() {
     const shardPromises = [];
 
     // 不同分片之间并行执行
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < shardNum; i++) {
         shardPromises.push(
             deployContractsForShard(i)
         );

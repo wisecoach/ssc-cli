@@ -1,5 +1,6 @@
 # IdeaIDE
 .idea
+.env
 
 #VsIDE
 .vscode

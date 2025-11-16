@@ -1,6 +1,7 @@
 {
   "name": "cli",
   "version": "1.0.0",
+  "type": "commonjs",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -11,8 +12,9 @@
   "dependencies": {
     "@truffle/hdwallet-provider": "^2.1.15",
     "bn": "^1.0.5",
-    "dotenv": "^16.4.5",
+    "dotenv": "^16.6.1",
     "ethereumjs-wallet": "^1.0.2",
+    "js-yaml": "^4.1.1",
     "solc": "^0.8.27",
     "web3": "^4.13.0"
   }

@@ -139,7 +139,10 @@ class CTXProcessor:
         ax.set_yticklabels(y_labels)
         plt.xlabel('Cross-Shard Contract Calls')
         plt.ylabel('Total Contract Calls')
-        plt.savefig(f"../img/Heatmap of Transaction Count by Total and Cross-Shard Contract Calls.png", dpi=300)
+        plt.savefig(f"../img/Heatmap of Transaction Count by Total and Cross-Shard Contract Calls,pref={self.shard_strategy}.png",
+                    dpi=300,
+                    bbox_inches='tight',
+                    pad_inches=0)
         plt.show()
 
     def block_generator(self, files, start_block):
@@ -272,7 +275,7 @@ class CTXProcessor:
 
 tx_files = ['data/20000000to20249999_BlockTransaction.csv', 'data/20250000to20499999_BlockTransaction.csv', 'data/20500000to20749999_BlockTransaction.csv', 'data/20750000to20999999_BlockTransaction.csv']
 itx_files = ['data/20000000to20249999_InternalTransaction.csv', 'data/20250000to20499999_InternalTransaction.csv', 'data/20500000to20749999_InternalTransaction.csv', 'data/20750000to20999999_InternalTransaction.csv']
-for shard_strategy in ["prefix_2", "prefix_3", "prefix_4"]:
+for shard_strategy in ["prefix_2", "prefix_3"]:
     processor = CTXProcessor(20000000, 21000000, tx_files, itx_files, chunk_size=10000, shard_strategy=shard_strategy)
     processor.calc_cross_call_chain()
     # processor.matrix_to_csv(max_call=10)

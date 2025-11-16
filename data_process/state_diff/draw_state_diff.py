@@ -9,10 +9,16 @@ import seaborn as sns
 import datashader as ds
 import datashader.transfer_functions as tf
 
-matplotlib.rcParams['font.sans-serif'] = ['Simsum']  # 指定默认字体
+matplotlib.rcParams['font.sans-serif'] = ['simsum']  # 指定默认字体
 matplotlib.use('TkAgg')
 
 def get_tx_cnt_data(transpose=False) -> pd.DataFrame:
+    name_map = {
+        "normal_2": "Baseline",
+        "ssc_2:1": "SSCExec:1",
+        "ssc_2:5": "SSCExec:5",
+        "ssc_2:20": "SSCExec:20",
+    }
     data = []
     for name, batch in batches.items():
         ss, us, cs, d = batch
@@ -21,8 +27,9 @@ def get_tx_cnt_data(transpose=False) -> pd.DataFrame:
                                        conflict_strategy=cs, max_delay=d)
         processor.calc_conflict_txs()
         tx_cnt_data = processor.to_tx_cnt_data()
-        tx_cnt_data['name'] = name
-        data.append(tx_cnt_data)
+        if name in name_map:
+            tx_cnt_data['name'] = name_map[name]
+            data.append(tx_cnt_data)
     df = pd.DataFrame(data)
     if transpose:
         df = df.T
@@ -47,7 +54,7 @@ def draw_tx_cnt(df: pd.DataFrame) -> None:
 
     # 设置柱状图位置和宽度
     x = np.arange(len(df['name']))
-    width = 0.22
+    width = 0.25
 
     # 绘制柱状图
     rects1 = ax.bar(x-width, df['ctx_commit_cnt'], width, label='success', color='green')
@@ -56,26 +63,26 @@ def draw_tx_cnt(df: pd.DataFrame) -> None:
 
     # 设置纵轴格式（以k为单位）
     def thousands_formatter(x, pos):
-        return f'{x / 1000:.1f}k'
+        return f'{x / 1000:.0f}'
 
     ax.yaxis.set_major_formatter(FuncFormatter(thousands_formatter))
 
     # 添加标签和标题
-    ax.set_xlabel('方案类型', fontsize=12, labelpad=10)
-    ax.set_ylabel('数量/k', fontsize=12, labelpad=10)
-    ax.set_title('不同方案交易数量对比', fontsize=14, fontweight='bold', pad=15)
+    ax.set_xlabel('Cross-Shard Transaction Execution Scheme', fontsize=14, labelpad=10)
+    ax.set_ylabel('txs/k', fontsize=14, labelpad=10)
     ax.set_xticks(x)
-    ax.set_xticklabels(df['name'], fontsize=11)
-    ax.legend(loc='upper right', frameon=True, framealpha=0.9)
+    ax.set_xticklabels(df['name'], fontsize=14)
+    ax.set_yticklabels(ax.get_yticklabels(), fontsize=14)
+    ax.legend(loc='upper left', frameon=True, framealpha=0.9, fontsize=14)
 
     def add_labels(rects, offset_factor=1.0):
         for rect in rects:
             height = rect.get_height()
-            ax.annotate(f'{height / 1000:.1f}k',
+            ax.annotate(f'{height / 1000:.0f}',
                         xy=(rect.get_x() + rect.get_width() / 2, height),
                         xytext=(0, 3),  # 3 points vertical offset
                         textcoords="offset points",
-                        ha='center', va='bottom', fontsize=9)
+                        ha='center', va='bottom', fontsize=14)
 
     add_labels(rects1)
     add_labels(rects2, offset_factor=0.8)
@@ -83,7 +90,7 @@ def draw_tx_cnt(df: pd.DataFrame) -> None:
 
     # 调整布局
     plt.tight_layout()
-    plt.savefig('transaction_comparison.png', dpi=300, bbox_inches='tight')
+    plt.savefig('../img/Comparison of Transaction Success, Failure, and Conflict Rates Across Different Cross-Shard Transaction Schemes.png', dpi=300, bbox_inches='tight')
     plt.show()
 
 
